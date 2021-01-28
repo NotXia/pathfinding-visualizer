@@ -1,56 +1,224 @@
-var all_grids = {}
+const WALL_TILE = 0;
+const ROAD_TILE = 1;
+const START_TILE = 2;
+const END_TILE = 3;
 
-/* Resizes all created grids */
-function resize_grids() {
-    for (const [key, value] of Object.entries(all_grids)) {
-        resize_grid(key);
+class Coord {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    getX() {
+        return this.x;
+    }
+
+    getY() {
+        return this.y;
+    }
+
+    equals(coord) {
+        if(coord === undefined) {
+            return false;
+        }
+        else {
+            return this.x == coord.getX() && this.y == coord.getY();
+        }
     }
 }
 
-/* Resizes a specific grid */
-function resize_grid(container_id) {
-    if (all_grids[container_id] !== undefined) {
-        var columns = all_grids[container_id].columns;
-        var rows = all_grids[container_id].rows;
+class Square {
+    constructor(color, type) {
+        this.color = color;
+        this.type = type;
+    }
+
+    setColor(color) {
+        this.color = color;
+    }
+
+    getType() {
+        return this.type;
+    }
+    setType(type) {
+        this.type = type;
+    }
+}
+
+class Grid {
+    constructor(container_id, columns, rows) {
+        this.container_id = container_id;
+        this.columns = columns;
+        this.rows = rows;
         var container = document.getElementById(container_id);
-        var grid = document.getElementById(container_id + "grid-container");
-    
-        var square_size = Math.min(container.clientWidth / columns, container.clientHeight / rows);
-        grid.style.width = (square_size * columns) + "px";
-        grid.style.height = (square_size * rows) + "px";
-    
-        grid.style.gridTemplateColumns = (square_size + "px ").repeat(columns);
-        grid.style.gridTemplateRows = (square_size + "px ").repeat(rows);
 
-    }
-};
+        // Generation the grid container
+        var grid = document.createElement("div");
+        grid.className = "grid-container";
+        grid.id = container_id + "grid-container";
 
-/* Creates a grid in a specific div */
-function create_grid(container_id, columns, rows) {
-    var container = document.getElementById(container_id);
+        // Drawing handler
+        var draw = function (coord, grid) {
+            switch (curr_mode) {
+                case WALL_TILE:
+                    grid.setWall(coord);
+                    break;
 
-    // Generation the grid container
-    var grid = document.createElement("div");
-    grid.style.width = container.clientWidth;
-    grid.style.height = container.clientHeight;
-    grid.className = "grid-container";
-    grid.id = container_id + "grid-container";
+                case ROAD_TILE:
+                    grid.setRoad(coord);
+                    break;
 
-    // Generation of all the required squares
-    for (var i = 0; i < rows; i++) {
-        for (var j = 0; j < columns; j++) {
-            var square = document.createElement("div");
-            square.className = "tile";
-            grid.appendChild(square);
+                case START_TILE:
+                    grid.setStart(coord);
+                    break;
+
+                case END_TILE:
+                    grid.setEnd(coord);
+                    break;
+            }
         }
+
+        // Generation of all the squares
+        this.matrix = [columns];
+        for (let x = 0; x < columns; x++) {
+            this.matrix[x] = [rows];
+
+            for (let y = 0; y < rows; y++) {
+                this.matrix[x][y] = new Square("white", ROAD_TILE);
+                
+                var square = document.createElement("div");
+                square.className = "square";
+                square.id = this.getSquareId(new Coord(x, y));
+                
+                var grid_class = this;
+                square.addEventListener("mouseover", function () {
+                    if (drawing) {
+                        draw(new Coord(x, y), grid_class);
+                    }
+                }, false);
+                square.addEventListener("mousedown", function (event) {
+                    event.preventDefault();
+                    startDrawing();
+                    draw(new Coord(x, y), grid_class);
+                }, false);
+                square.addEventListener("mouseup", function () {
+                    stopDrawing();
+                }, false);
+
+                grid.appendChild(square);
+            }
+        }
+
+        container.appendChild(grid);
+
+        all_grids.push(this);
+        this.resize();
     }
 
-    container.appendChild(grid);
+    getColums() {
+        return this.columns;
+    } 
+    
+    getRows() {
+        return this.rows;
+    }
 
-    all_grids[container_id] = {
-        "columns" : columns,
-        "rows" : rows
-    };
+    /* Gets the Coord object of the starting point */
+    getStart() {
+        for (let i = 0; i < this.columns; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                if (this.matrix[i][j].getType() == START_TILE) {
+                    return new Coord(i, j)
+                }
+            }
+        }
+        return undefined;
+    }
 
-    resize_grid(container_id);
+    /* Gets the Coord object of the ending point */
+    getEnd() {
+        for (let i = 0; i < this.columns; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                if (this.matrix[i][j].getType() == END_TILE) {
+                    return new Coord(i, j)
+                }
+            }
+        }
+        return undefined;
+    }
+
+    /* Resizes the grid */
+    resize() {
+        var container = document.getElementById(this.container_id);
+        var grid = document.getElementById(this.container_id + "grid-container");
+
+        var square_size = Math.min(container.clientWidth / this.columns, container.clientHeight / this.rows);
+        grid.style.width = (square_size * this.columns) + "px";
+        grid.style.height = (square_size * this.rows) + "px";
+
+        grid.style.gridTemplateColumns = (square_size + "px ").repeat(this.columns);
+        grid.style.gridTemplateRows = (square_size + "px ").repeat(this.rows);
+    }
+
+    setAt(coord, color, type) {
+        var square = document.getElementById(this.getSquareId(coord));
+        square.style.backgroundColor = color;
+        this.matrix[coord.getX()][coord.getY()].setColor(color);
+        this.matrix[coord.getX()][coord.getY()].setType(type);
+    }
+
+    getSquareId(coord) {
+        return this.container_id + "-" + coord.getX() + "-" + coord.getY();
+    }
+
+    setWall(coord) {
+        this.setAt(coord, "black", WALL_TILE);
+    }
+
+    setRoad(coord) {
+        this.setAt(coord, "white", ROAD_TILE);
+    }
+
+    setStart(coord) {
+        var start_coord = this.getStart();
+
+        if (start_coord !== undefined) {
+            this.setAt(start_coord, "white", ROAD_TILE);
+        }
+        this.setAt(coord, "red", START_TILE);
+    }
+
+    setEnd(coord) {
+        var end_coord = this.getEnd();
+        
+        if (end_coord !== undefined) {
+            this.setAt(end_coord, "white", ROAD_TILE);
+        }
+        this.setAt(coord, "green", END_TILE);
+    }
+}
+
+
+var all_grids = []
+/* Resizes all created grids */
+function resize_grids() {
+    all_grids.forEach(grid => {
+        grid.resize();
+    });
+}
+
+
+var drawing = false;
+var curr_mode = 0;
+
+function setCurrentMode(mode) {
+    curr_mode = mode;
+}
+
+function startDrawing() {
+    drawing = true;
+}
+
+function stopDrawing() {
+    drawing = false;
 }

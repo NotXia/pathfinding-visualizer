@@ -10,17 +10,21 @@
     
     <body>
         
-        <div id="field" style="width: 80vw; height: 80vh; margin: 0 auto;"></div>
+        <button onclick="setCurrentMode(WALL_TILE);">Wall</button>
+        <button onclick="setCurrentMode(ROAD_TILE);">Rubber</button>
+        <button onclick="setCurrentMode(START_TILE);">Start</button>
+        <button onclick="setCurrentMode(END_TILE);">End</button>
+
+        <div id="field" style="width: 98vw; height: 80vh; margin: 0 auto;"></div>
         
     </body>
     
     <script>
-
         window.addEventListener("resize", function() {
             resize_grids();
         });
 
-        create_grid("field", 20, 20);
+        var grid = new Grid("field", 5, 5);
 
     </script>
 
