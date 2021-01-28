@@ -1,31 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="./js/grid.js"></script>
-        <link rel="stylesheet" href="css/grid.css">
-        <title>Path Finder</title>
-    </head>
-    
-    <body>
-        
-        <button onclick="setCurrentMode(WALL_TILE);">Wall</button>
-        <button onclick="setCurrentMode(ROAD_TILE);">Rubber</button>
-        <button onclick="setCurrentMode(START_TILE);">Start</button>
-        <button onclick="setCurrentMode(END_TILE);">End</button>
 
-        <div id="field" style="width: 98vw; height: 80vh; margin: 0 auto;"></div>
-        
-    </body>
-    
-    <script>
-        window.addEventListener("resize", function() {
-            resize_grids();
-        });
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/grid.js"></script>
+    <link rel="stylesheet" href="css/grid.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <title>Path Finder</title>
+</head>
 
-        var grid = new Grid("field", 5, 5);
+<body>
 
-    </script>
+    <div class="topbar">
+        <div class="button-box">
+            <button class="button button-wall" onclick="setCurrentMode(WALL_TILE);"></button>
+            <button class="button button-road" onclick="setCurrentMode(ROAD_TILE);"></button>
+            <button class="button button-start" onclick="setCurrentMode(START_TILE);"></button>
+            <button class="button button-end" onclick="setCurrentMode(END_TILE);"></button>
+
+            <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1">
+            <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1">
+        </div>
+    </div>
+
+    <div id="field" style="width: 90vw; height: 80vh; margin: 0 auto;"></div>
+
+</body>
+
+<script>
+    var columns_input = document.getElementById("grid_columns");
+    var rows_input = document.getElementById("grid_rows");
+    var grid_container = document.getElementById("field");
+
+    window.addEventListener("resize", function () {
+        resize_grids();
+    });
+
+    var grid = new Grid("field", 15, 15);
+
+    columns_input.addEventListener("change", function () {
+        grid_container.innerHTML = "";
+        grid = new Grid("field", columns_input.value, rows_input.value);
+    });
+
+    rows_input.addEventListener("change", function () {
+        grid_container.innerHTML = "";
+        grid = new Grid("field", columns_input.value, rows_input.value);
+    });
+</script>
 
 </html>

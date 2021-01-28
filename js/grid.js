@@ -18,7 +18,7 @@ class Coord {
     }
 
     equals(coord) {
-        if(coord === undefined) {
+        if (coord === undefined) {
             return false;
         }
         else {
@@ -85,11 +85,11 @@ class Grid {
 
             for (let y = 0; y < rows; y++) {
                 this.matrix[x][y] = new Square("white", ROAD_TILE);
-                
+
                 var square = document.createElement("div");
                 square.className = "square";
                 square.id = this.getSquareId(new Coord(x, y));
-                
+
                 var grid_class = this;
                 square.addEventListener("mouseover", function () {
                     if (drawing) {
@@ -117,8 +117,8 @@ class Grid {
 
     getColums() {
         return this.columns;
-    } 
-    
+    }
+
     getRows() {
         return this.rows;
     }
@@ -160,10 +160,10 @@ class Grid {
         grid.style.gridTemplateRows = (square_size + "px ").repeat(this.rows);
     }
 
-    setAt(coord, color, type) {
+    setAt(coord, type) {
         var square = document.getElementById(this.getSquareId(coord));
-        square.style.backgroundColor = color;
-        this.matrix[coord.getX()][coord.getY()].setColor(color);
+        square.classList.remove("tile0", "tile1", "tile2", "tile3");
+        square.classList.add("tile" + type);
         this.matrix[coord.getX()][coord.getY()].setType(type);
     }
 
@@ -172,29 +172,29 @@ class Grid {
     }
 
     setWall(coord) {
-        this.setAt(coord, "black", WALL_TILE);
+        this.setAt(coord, WALL_TILE);
     }
 
     setRoad(coord) {
-        this.setAt(coord, "white", ROAD_TILE);
+        this.setAt(coord, ROAD_TILE);
     }
 
     setStart(coord) {
         var start_coord = this.getStart();
 
         if (start_coord !== undefined) {
-            this.setAt(start_coord, "white", ROAD_TILE);
+            this.setAt(start_coord, ROAD_TILE);
         }
-        this.setAt(coord, "red", START_TILE);
+        this.setAt(coord, START_TILE);
     }
 
     setEnd(coord) {
         var end_coord = this.getEnd();
-        
+
         if (end_coord !== undefined) {
-            this.setAt(end_coord, "white", ROAD_TILE);
+            this.setAt(end_coord, ROAD_TILE);
         }
-        this.setAt(coord, "green", END_TILE);
+        this.setAt(coord, END_TILE);
     }
 }
 

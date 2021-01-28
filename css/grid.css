@@ -4,5 +4,21 @@
 }
 
 .square {
-    border: 1px black solid;
+    border: 1px #494949 solid;
+}
+
+.tile0 { /* Wall */
+    background-color: #686666;
+}
+
+.tile1 { /* Road */
+    background-color: transparent;
+}
+
+.tile2 { /* Start */
+    background-color: #bb1919;
+}
+
+.tile3 { /* End */
+    background-color: #05850b;
 }
