@@ -34,19 +34,17 @@
     var grid_container = document.getElementById("field");
 
     window.addEventListener("resize", function () {
-        resize_grids();
+        scale_grids();
     });
 
     var grid = new Grid("field", 15, 15);
 
     columns_input.addEventListener("change", function () {
-        grid_container.innerHTML = "";
-        grid = new Grid("field", columns_input.value, rows_input.value);
+        grid.resize(parseInt(columns_input.value), parseInt(rows_input.value));
     });
 
     rows_input.addEventListener("change", function () {
-        grid_container.innerHTML = "";
-        grid = new Grid("field", columns_input.value, rows_input.value);
+        grid.resize(parseInt(columns_input.value), parseInt(rows_input.value));
     });
 </script>
 
