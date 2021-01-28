@@ -32,12 +32,6 @@ class Grid {
         this.container_id = container_id;
         this.columns = columns;
         this.rows = rows;
-        var container = document.getElementById(container_id);
-
-        // Generation the grid container
-        var grid = document.createElement("div");
-        grid.className = "grid-container";
-        grid.id = container_id + "grid-container";
 
         // Generation of all the squares
         this.matrix = [];
