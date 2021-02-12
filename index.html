@@ -14,13 +14,28 @@
 
     <div class="topbar">
         <div class="button-box">
-            <button class="button button-wall" onclick="setCurrentMode(WALL_TILE);"></button>
-            <button class="button button-road" onclick="setCurrentMode(ROAD_TILE);"></button>
-            <button class="button button-start" onclick="setCurrentMode(START_TILE);"></button>
-            <button class="button button-end" onclick="setCurrentMode(END_TILE);"></button>
+            <div class="button-group">
+                <button class="button button-wall" onclick="setCurrentMode(WALL_TILE);"></button>
+                <button class="button button-road" onclick="setCurrentMode(ROAD_TILE);"></button>
+                <button class="button button-start" onclick="setCurrentMode(START_TILE);"></button>
+                <button class="button button-end" onclick="setCurrentMode(END_TILE);"></button>
+            </div>
 
-            <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1">
-            <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1">
+            <div class="button-group">
+                <button class="button button-play" id="play_button"></button>
+                <button class="button button-reset" id="reset_button" onclick="grid.reset()"></button>
+                <select class="algorithm-select" id="algorithm">
+                    <option value="dijkstra1">Dijkstra (diagonal)</option>
+                    <option value="dijkstra2">Dijkstra (straight)</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1">
+                <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1">
+                <input type="range" min="0" max="1000" value="50" id="speed_slider">
+            </div>
+
         </div>
     </div>
 
@@ -46,6 +61,45 @@
     rows_input.addEventListener("change", function () {
         grid.resize(parseInt(columns_input.value), parseInt(rows_input.value));
     });
+
+    document.getElementById("play_button").addEventListener("click", async function () {
+        if(grid.isValid()) {
+            var algorithm = document.getElementById("algorithm").value;
+    
+            grid.reset();
+            lock();
+            switch (algorithm) {
+                case "dijkstra1":
+                    await dijkstra_d(grid);
+                    break;
+    
+                case "dijkstra2":
+                    await dijkstra_s(grid);
+                    break;
+            }
+            unlock();
+        }
+    });
+
+    document.getElementById("speed_slider").addEventListener("change", function () {
+        animation_speed(document.getElementById("speed_slider").value);
+    });
+
+    function lock() {
+        document.getElementById("play_button").classList.add("lock");
+        document.getElementById("reset_button").classList.add("lock");
+        document.getElementById("grid_columns").classList.add("lock");
+        document.getElementById("grid_rows").classList.add("lock");
+        grid.lock();
+    }
+
+    function unlock() {
+        document.getElementById("play_button").classList.remove("lock");
+        document.getElementById("reset_button").classList.remove("lock");
+        document.getElementById("grid_columns").classList.remove("lock");
+        document.getElementById("grid_rows").classList.remove("lock");
+        grid.unlock();
+    }
 </script>
 
 </html>

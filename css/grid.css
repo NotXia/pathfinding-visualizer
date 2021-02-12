@@ -22,3 +22,15 @@
 .tile3 { /* End */
     background-color: #05850b;
 }
+
+.tile4 { /* Visited */
+    background-color: #6b0585;
+}
+
+.tile5 { /* Path */
+    background-color: #13be1c;
+}
+
+.lock {
+    pointer-events: none;
+}

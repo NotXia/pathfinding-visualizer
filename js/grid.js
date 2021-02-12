@@ -1,7 +1,13 @@
+var script = document.createElement("script");
+script.src = "./js/finder.js";
+document.head.appendChild(script);
+
 const WALL_TILE = 0;
 const ROAD_TILE = 1;
 const START_TILE = 2;
 const END_TILE = 3;
+const VISITED_TILE = 4;
+const PATH_TILE = 5;
 
 class Coord {
     constructor(x, y) {
@@ -25,6 +31,10 @@ class Coord {
             return this.x == coord.getX() && this.y == coord.getY();
         }
     }
+
+    toString() {
+        return "(" + this.x + ";" + this.y + ")";
+    }
 }
 
 class Grid {
@@ -46,6 +56,7 @@ class Grid {
         all_grids.push(this);
     }
 
+    /* Sets all the listener for a tile */
     add_square_listeners(square, coord) {
         var grid_class = this;
 
@@ -66,6 +77,7 @@ class Grid {
         }, false);
     }
 
+    /* Displays the grid */
     render() {
         // Generation the grid container
         var grid = document.createElement("div");
@@ -89,7 +101,7 @@ class Grid {
         this.scale();
     }
 
-    getColums() {
+    getColumns() {
         return this.columns;
     }
 
@@ -117,6 +129,14 @@ class Grid {
 
             case END_TILE:
                 this.setEnd(coord);
+                break;
+
+            case VISITED_TILE:
+                this.setVisited(coord);
+                break;
+
+            case PATH_TILE:
+                this.setPath(coord);
                 break;
         }
     }
@@ -160,7 +180,7 @@ class Grid {
 
     setAt(coord, type) {
         var square = document.getElementById(this.getSquareId(coord));
-        square.classList.remove("tile0", "tile1", "tile2", "tile3");
+        square.classList.remove("tile0", "tile1", "tile2", "tile3", "tile4", "tile5");
         square.classList.add("tile" + type);
 
         this.matrix[coord.getX()][coord.getY()] = type;
@@ -194,6 +214,14 @@ class Grid {
             this.setAt(end_coord, ROAD_TILE);
         }
         this.setAt(coord, END_TILE);
+    }
+
+    setVisited(coord) {
+        this.setAt(coord, VISITED_TILE);
+    }
+
+    setPath(coord) {
+        this.setAt(coord, PATH_TILE);
     }
 
     /* Resizes the grid and renders it */
@@ -231,6 +259,31 @@ class Grid {
         this.rows = new_rows;
 
         this.render();
+    }
+
+    /* Removes from the matrix all tge visited node and the final path of the previous search */
+    reset() {
+        for (let i = 0; i < this.columns; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                if (this.matrix[i][j] == VISITED_TILE || this.matrix[i][j] == PATH_TILE) {
+                    this.matrix[i][j] = ROAD_TILE;
+                }
+            }
+        }
+        this.render();
+    }
+
+    lock() {
+        document.getElementById(this.container_id).classList.add("lock");
+    }
+
+    unlock() {
+        document.getElementById(this.container_id).classList.remove("lock");
+    }
+
+    /* Checks if the start and the end nodes are set */
+    isValid() {
+        return (this.getStart() !== undefined) && (this.getEnd() !== undefined);
     }
 }
 

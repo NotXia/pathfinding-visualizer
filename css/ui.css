@@ -21,6 +21,11 @@ body {
     margin: auto;
 }
 
+.button-group {
+    padding-right: 1.5vw;
+    padding-left: 1.5vw;
+}
+
 .button {
     background-color: #ffffff;
     border-radius: 50%;
@@ -67,6 +72,22 @@ body {
     background-position: center center;
 }
 
+.button-play {
+    image-rendering: -webkit-optimize-contrast;
+    background-image: url('../img/play.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.button-reset {
+    image-rendering: -webkit-optimize-contrast;
+    background-image: url('../img/reset.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
 .button:hover {
     opacity: 1;
 }
@@ -81,3 +102,9 @@ body {
     border: none;
     border-radius: 4px;
 }
+
+.algorithm-select {
+    border: none;
+    border-radius: 5em;
+    padding: .2vh;
+}    
