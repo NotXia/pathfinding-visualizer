@@ -73,13 +73,15 @@
             switch (algorithm) {
                 case "dijkstra1":
                     await dijkstra_d(grid);
+                    console.log("AAA");
+                    unlock();
                     break;
     
                 case "dijkstra2":
                     await dijkstra_s(grid);
+                    unlock();
                     break;
             }
-            unlock();
         }
     });
 

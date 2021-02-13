@@ -1,9 +1,9 @@
 async function dijkstra_d(grid) {
-    dijkstra(grid, adjacent_nodes_d);
+    await dijkstra(grid, adjacent_nodes_d);
 }
 
 async function dijkstra_s(grid) {
-    dijkstra(grid, adjacent_nodes_s);
+    await dijkstra(grid, adjacent_nodes_s);
 }
 
 async function dijkstra(grid, adjacent_nodes_function) {
