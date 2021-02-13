@@ -20,15 +20,15 @@
 }
 
 .tile3 { /* End */
-    background-color: #05850b;
+    background-color: #04d10e;
 }
 
 .tile4 { /* Visited */
-    background-color: #6b0585;
+    background-color: #5f5e5f46;
 }
 
 .tile5 { /* Path */
-    background-color: #13be1c;
+    background-color: #5bdf6273;
 }
 
 .lock {
