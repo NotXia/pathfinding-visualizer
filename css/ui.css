@@ -11,6 +11,7 @@ body {
     margin-top: 2vh;
     border-radius: 5vh;
     background-color: #363638;
+    transition: 0.5s;
 }
 
 .button-box {
@@ -22,6 +23,7 @@ body {
 }
 
 .button-group {
+    display: flex;
     padding-right: 1.5vw;
     padding-left: 1.5vw;
 }
@@ -103,8 +105,14 @@ body {
     border-radius: 4px;
 }
 
+.algorithm-select-container {
+    display: inline-flex;
+    align-items:center;
+}
+
 .algorithm-select {
     border: none;
     border-radius: 5em;
-    padding: .2vh;
+    padding: 0.5vh;
+    font-size: 0.9em;
 }    

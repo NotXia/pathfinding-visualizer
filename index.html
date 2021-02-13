@@ -15,25 +15,27 @@
     <div class="topbar">
         <div class="button-box">
             <div class="button-group">
-                <button class="button button-wall" onclick="setCurrentMode(WALL_TILE);"></button>
-                <button class="button button-road" onclick="setCurrentMode(ROAD_TILE);"></button>
-                <button class="button button-start" onclick="setCurrentMode(START_TILE);"></button>
-                <button class="button button-end" onclick="setCurrentMode(END_TILE);"></button>
+                <button class="button button-wall" onclick="setCurrentMode(WALL_TILE);" title="Wall"></button>
+                <button class="button button-road" onclick="setCurrentMode(ROAD_TILE);" title="Eraser"></button>
+                <button class="button button-start" onclick="setCurrentMode(START_TILE);" title="Start point"></button>
+                <button class="button button-end" onclick="setCurrentMode(END_TILE);" title="End point"></button>
             </div>
 
             <div class="button-group">
-                <button class="button button-play" id="play_button"></button>
-                <button class="button button-reset" id="reset_button" onclick="grid.reset()"></button>
-                <select class="algorithm-select" id="algorithm">
-                    <option value="dijkstra1">Dijkstra (diagonal)</option>
-                    <option value="dijkstra2">Dijkstra (straight)</option>
-                </select>
+                <button class="button button-play" id="play_button" title="Play"></button>
+                <button class="button button-reset" id="reset_button" onclick="grid.reset()" title="Reset"></button>
+                <div class="algorithm-select-container">
+                    <select class="algorithm-select" id="algorithm">
+                        <option value="dijkstra1">Dijkstra (diagonal)</option>
+                        <option value="dijkstra2">Dijkstra (straight)</option>
+                    </select>
+                </div>
             </div>
 
             <div class="button-group">
-                <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1">
-                <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1">
-                <input type="range" min="0" max="1000" value="50" id="speed_slider">
+                <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1" title="Width">
+                <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1" title="Height">
+                <input type="range" min="0" max="1000" value="50" id="speed_slider" title="Speed">
             </div>
 
         </div>
