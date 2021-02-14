@@ -14,29 +14,31 @@ async function dfs(grid, adjacent_nodes_function) {
     var final_path = [];
     var found = false;
     
-    async function explore(node) {
+    async function explore(node, path) {
         visited[node.toString()] = true;
 
         if (node.equals(end_coord)) {
             found = true;
+            final_path = path;
             return;
         }
         if (!node.equals(start_coord)) {
             grid.draw(node, VISITED_TILE);
             await new Promise(r => setTimeout(r, ANIMATION_SPEED));
         }
-        final_path.push(node);
+        path.push(node);
         
         let adjacent = adjacent_nodes_function(grid, node);
         for(var i=0; i<adjacent.length && !found; i++) {
             if (visited[adjacent[i].toString()] === undefined && !found) {
-                await explore(adjacent[i]);
+                await explore(adjacent[i], path.slice());
             }
         }
     }
 
-    await explore(start_coord);
+    await explore(start_coord, []);
 
+    
     if (found) {
         for (var i = 0; i < final_path.length; i++) {
             let node = final_path[i];
