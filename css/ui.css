@@ -39,7 +39,8 @@ body {
     outline: none;
     text-align: center;
     text-decoration: none;
-    padding: 2.5vh;
+    width: 5vh;
+    height: 5vh;
     display: inline-block;
     opacity: 0.7;
     transition: 0.5s;
@@ -47,7 +48,6 @@ body {
 }
 
 .button-wall {
-    image-rendering: -webkit-optimize-contrast;
     background-image: url('../img/wall.png');
     background-size: 50%;
     background-repeat: no-repeat;
@@ -55,7 +55,6 @@ body {
 }
 
 .button-road {
-    image-rendering: -webkit-optimize-contrast;
     background-image: url('../img/road.png');
     background-size: 50%;
     background-repeat: no-repeat;
@@ -63,7 +62,6 @@ body {
 }
 
 .button-start {
-    image-rendering: -webkit-optimize-contrast;
     background-image: url('../img/start.png');
     background-size: 50%;
     background-repeat: no-repeat;
@@ -71,7 +69,6 @@ body {
 }
 
 .button-end {
-    image-rendering: -webkit-optimize-contrast;
     background-image: url('../img/end.png');
     background-size: 50%;
     background-repeat: no-repeat;
@@ -79,7 +76,6 @@ body {
 }
 
 .button-play {
-    image-rendering: -webkit-optimize-contrast;
     background-image: url('../img/play.png');
     background-size: 50%;
     background-repeat: no-repeat;
@@ -87,8 +83,14 @@ body {
 }
 
 .button-reset {
-    image-rendering: -webkit-optimize-contrast;
     background-image: url('../img/reset.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.button-cost {
+    background-image: url('../img/coin.png');
     background-size: 50%;
     background-repeat: no-repeat;
     background-position: center center;
@@ -129,4 +131,15 @@ body {
 .diagonal-checkbox-container {
     margin-top: 0.2em;
     color: #f1f0f0;
+}
+
+.cost-container {
+    display: inline-flex;
+    align-items:center;
+}
+.cost-input {
+    display: none;
+    transition: 0.5s;
+    width: 2vw;
+    font-size: 0.9em;
 }

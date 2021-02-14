@@ -16,10 +16,14 @@
     <div class="topbar">
         <div class="button-box">
             <div class="button-group">
-                <button class="button button-wall" onclick="setCurrentMode(WALL_TILE);" title="Wall"></button>
-                <button class="button button-road" onclick="setCurrentMode(ROAD_TILE);" title="Eraser"></button>
-                <button class="button button-start" onclick="setCurrentMode(START_TILE);" title="Start point"></button>
-                <button class="button button-end" onclick="setCurrentMode(END_TILE);" title="End point"></button>
+                <button class="button button-wall" id="button_wall" title="Wall"></button>
+                <button class="button button-road" id="button_road" title="Eraser"></button>
+                <button class="button button-start" id="button_start" title="Start point"></button>
+                <button class="button button-end" id="button_end" title="End point"></button>
+                <div class="cost-container">
+                    <button class="button button-cost" id="button_cost" title="Cost"></button>
+                    <input class="cost-input" id="cost_input" type="number" placeholder="Cost" min="1">
+                </div>
             </div>
 
             <div class="button-group">
@@ -65,7 +69,7 @@
         scale_grids();
     });
 
-    var grid = new Grid("field", 15, 15);
+    var grid = new Grid("field", 15, 15, "cost_input");
 
     columns_input.addEventListener("change", function () {
         grid.resize(parseInt(columns_input.value), parseInt(rows_input.value));
@@ -73,6 +77,27 @@
 
     rows_input.addEventListener("change", function () {
         grid.resize(parseInt(columns_input.value), parseInt(rows_input.value));
+    });
+
+    document.getElementById("button_wall").addEventListener("click", function () {
+        setCurrentMode(WALL_TILE);
+        document.getElementById("cost_input").style.display = "none";
+    });
+    document.getElementById("button_road").addEventListener("click", function () {
+        setCurrentMode(ROAD_TILE);
+        document.getElementById("cost_input").style.display = "none";
+    });
+    document.getElementById("button_start").addEventListener("click", function () {
+        setCurrentMode(START_TILE);
+        document.getElementById("cost_input").style.display = "none";
+    });
+    document.getElementById("button_end").addEventListener("click", function () {
+        setCurrentMode(END_TILE);
+        document.getElementById("cost_input").style.display = "none";
+    });
+    document.getElementById("button_cost").addEventListener("click", function () {
+        setCurrentMode(COST_TILE);
+        document.getElementById("cost_input").style.display = "block";
     });
 
     document.getElementById("play_button").addEventListener("click", async function () {

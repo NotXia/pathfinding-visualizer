@@ -5,6 +5,7 @@
 
 .square {
     border: 1px #494949 solid;
+    color: #d8d8d8
 }
 
 .tile0 { /* Wall */
@@ -20,7 +21,7 @@
 }
 
 .tile3 { /* End */
-    background-color: #04d10e;
+    background-color: #03b40b;
 }
 
 .tile4 { /* Visited */

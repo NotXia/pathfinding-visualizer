@@ -23,25 +23,29 @@ async function dijkstra(grid, adjacent_nodes_function) {
     
     cost_to[start_coord.toString()] = 0;
     best_node_to[start_coord.toString()] = start_coord;
-    to_visit.push(start_coord);
+    to_visit.push([start_coord, 0]);
 
     while(to_visit.length > 0) {
-        let curr_coord = to_visit.shift();
+        let curr_coord = to_visit.shift()[0];
 
         if (curr_coord.equals(end_coord)) {
             break;
         }
-        if (!curr_coord.equals(start_coord)) {
+        if (!curr_coord.equals(start_coord) && !curr_coord.equals(end_coord)) {
             grid.draw(curr_coord, VISITED_TILE);
         }
         
         await new Promise(r => setTimeout(r, ANIMATION_SPEED));
 
         adjacent_nodes_function(grid, curr_coord).forEach(near_node => {
-            if (cost_to[curr_coord.toString()] + (1) < cost_to[near_node.toString()]) {
-                cost_to[near_node.toString()] = cost_to[curr_coord.toString()] + (1);
+            if (Number(cost_to[curr_coord.toString()]) + Number(grid.getCostAt(near_node)) < cost_to[near_node.toString()]) {
+                cost_to[near_node.toString()] = Number(cost_to[curr_coord.toString()]) + Number(grid.getCostAt(near_node));
                 best_node_to[near_node.toString()] = curr_coord;
-                to_visit.push(near_node);
+                to_visit.push([near_node, cost_to[near_node.toString()]]);
+                to_visit.sort(function(a, b) {
+                    return a[1] - b[1];
+                });
+                console.log(to_visit);
             }
         });
     }
