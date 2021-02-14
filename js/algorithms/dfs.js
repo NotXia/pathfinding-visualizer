@@ -12,12 +12,14 @@ async function dfs(grid, adjacent_nodes_function) {
     
     var visited = [];
     var final_path = [];
+    var found = false;
     
     async function explore(node) {
         visited[node.toString()] = true;
 
         if (node.equals(end_coord)) {
-            return true;
+            found = true;
+            return;
         }
         if (!node.equals(start_coord)) {
             grid.draw(node, VISITED_TILE);
@@ -25,24 +27,23 @@ async function dfs(grid, adjacent_nodes_function) {
         }
         final_path.push(node);
         
-        adjacent = adjacent_nodes_function(grid, node);
-        for(var i=0; i<adjacent.length; i++) {
-            if (visited[adjacent[i].toString()] === undefined) {
-                if (await explore(adjacent[i]) == true) {
-                    return true;
-                }
+        let adjacent = adjacent_nodes_function(grid, node);
+        for(var i=0; i<adjacent.length && !found; i++) {
+            if (visited[adjacent[i].toString()] === undefined && !found) {
+                await explore(adjacent[i]);
             }
         }
-        return false;
     }
 
     await explore(start_coord);
 
-    for (var i = 0; i < final_path.length; i++) {
-        let node = final_path[i];
-        if (node != start_coord) {
-            grid.draw(node, PATH_TILE);
+    if (found) {
+        for (var i = 0; i < final_path.length; i++) {
+            let node = final_path[i];
+            if (node != start_coord) {
+                grid.draw(node, PATH_TILE);
+            }
+            await new Promise(r => setTimeout(r, ANIMATION_SPEED));
         }
-        await new Promise(r => setTimeout(r, ANIMATION_SPEED));
     }
 }
