@@ -25,15 +25,21 @@
             <div class="button-group">
                 <button class="button button-play" id="play_button" title="Play"></button>
                 <button class="button button-reset" id="reset_button" onclick="grid.reset()" title="Reset"></button>
-                <div class="algorithm-select-container">
-                    <select class="algorithm-select" id="algorithm">
-                        <option value="dijkstra1">Dijkstra (diagonal)</option>
-                        <option value="dijkstra2">Dijkstra (straight)</option>
-                        <option value="bfs1">BFS (diagonal)</option>
-                        <option value="bfs2">BFS (straight)</option>
-                        <option value="dfs1">DFS (diagonal)</option>
-                        <option value="dfs2">DFS (straight)</option>
-                    </select>
+                <div class="algorithm-box">
+                    <div>
+                        <div class="algorithm-select-container">
+                            <select class="algorithm-select" id="algorithm">
+                                <option value="dijkstra">Dijkstra</option>
+                                <option value="bfs">BFS</option>
+                                <option value="dfs">DFS</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="diagonal-checkbox-container">
+                            <input id="diagonal_move" type="checkbox">
+                            <label for="diagonal_move">Diagonal moves</label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -72,32 +78,36 @@
     document.getElementById("play_button").addEventListener("click", async function () {
         if(grid.isValid()) {
             var algorithm = document.getElementById("algorithm").value;
+            var diagonal_move = document.getElementById("diagonal_move").checked;
     
             grid.reset();
             lock();
             switch (algorithm) {
-                case "dijkstra1":
-                    await dijkstra_d(grid);
+                case "dijkstra":
+                    if(diagonal_move) {
+                        await dijkstra_d(grid);
+                    }
+                    else {
+                        await dijkstra_s(grid);
+                    }
                     break;
     
-                case "dijkstra2":
-                    await dijkstra_s(grid);
+                case "bfs":
+                    if (diagonal_move) {
+                        await bfs_d(grid);
+                    }
+                    else {
+                        await bfs_s(grid);
+                    }
                     break;
 
-                case "bfs1":
-                    await bfs_d(grid);
-                    break;
-
-                case "bfs2":
-                    await bfs_s(grid);
-                    break;
-
-                case "dfs1":
-                    await dfs_d(grid);
-                    break;
-
-                case "dfs2":
-                    await dfs_s(grid);
+                case "dfs":
+                    if (diagonal_move) {
+                        await dfs_d(grid);
+                    }
+                    else {
+                        await dfs_s(grid);
+                    }
                     break;
             }
             unlock();
