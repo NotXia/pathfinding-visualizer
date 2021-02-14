@@ -1,7 +1,3 @@
-var script = document.createElement("script");
-script.src = "./js/finder.js";
-document.head.appendChild(script);
-
 const WALL_TILE = 0;
 const ROAD_TILE = 1;
 const START_TILE = 2;

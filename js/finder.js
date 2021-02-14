@@ -2,12 +2,19 @@ var script = document.createElement("script");
 script.src = "./js/algorithms/dijkstra.js";
 document.head.appendChild(script);
 
+var script = document.createElement("script");
+script.src = "./js/algorithms/bfs.js";
+document.head.appendChild(script);
+
+var script = document.createElement("script");
+script.src = "./js/algorithms/dfs.js";
+document.head.appendChild(script);
+
 var ANIMATION_SPEED = 50;
 
 function animation_speed(speed) {
     ANIMATION_SPEED = speed;
 }
-
 
 function adjacent_nodes_d(grid, coord) {
     var near = [];

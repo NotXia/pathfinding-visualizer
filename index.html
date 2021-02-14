@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./js/grid.js"></script>
+    <script src="./js/finder.js"></script>
     <link rel="stylesheet" href="css/grid.css">
     <link rel="stylesheet" href="css/ui.css">
     <title>Path Finder</title>
@@ -28,6 +29,10 @@
                     <select class="algorithm-select" id="algorithm">
                         <option value="dijkstra1">Dijkstra (diagonal)</option>
                         <option value="dijkstra2">Dijkstra (straight)</option>
+                        <option value="bfs1">BFS (diagonal)</option>
+                        <option value="bfs2">BFS (straight)</option>
+                        <option value="dfs1">DFS (diagonal)</option>
+                        <option value="dfs2">DFS (straight)</option>
                     </select>
                 </div>
             </div>
@@ -73,15 +78,29 @@
             switch (algorithm) {
                 case "dijkstra1":
                     await dijkstra_d(grid);
-                    console.log("AAA");
-                    unlock();
                     break;
     
                 case "dijkstra2":
                     await dijkstra_s(grid);
-                    unlock();
+                    break;
+
+                case "bfs1":
+                    await bfs_d(grid);
+                    break;
+
+                case "bfs2":
+                    await bfs_s(grid);
+                    break;
+
+                case "dfs1":
+                    await dfs_d(grid);
+                    break;
+
+                case "dfs2":
+                    await dfs_s(grid);
                     break;
             }
+            unlock();
         }
     });
 
