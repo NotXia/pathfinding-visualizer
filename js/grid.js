@@ -42,6 +42,7 @@ class Grid {
         this.columns = columns;
         this.rows = rows;
         this.cost_input = cost_input_id
+        this.show_cost = true;
 
         // Generation of all the squares
         this.matrix = [];
@@ -89,8 +90,11 @@ class Grid {
                 var square = document.createElement("div");
                 square.className = "square tile" + this.matrix[x][y].type;
                 square.id = this.getSquareId(new Coord(x, y));
-                if (this.matrix[x][y].cost > 1) {
+                if (this.show_cost && !([WALL_TILE, START_TILE, END_TILE]).includes(this.matrix[x][y].type)) {
                     square.innerHTML = this.matrix[x][y].cost;
+                }
+                else {
+                    square.innerHTML = "";
                 }
 
                 this.add_square_listeners(square, new Coord(x, y));
@@ -193,8 +197,12 @@ class Grid {
         var square = document.getElementById(this.getSquareId(coord));
         square.classList.remove("tile0", "tile1", "tile2", "tile3", "tile4", "tile5");
         square.classList.add("tile" + type);
-
+        
         this.matrix[coord.getX()][coord.getY()].type = type;
+
+        if (([WALL_TILE, START_TILE, END_TILE]).includes(type)) {
+            square.innerHTML = "";
+        }
     }
 
     getSquareId(coord) {
@@ -202,8 +210,8 @@ class Grid {
     }
 
     setWall(coord) {
-        this.setAt(coord, WALL_TILE);
         this.setCost(coord, DEFAULT_COST);
+        this.setAt(coord, WALL_TILE);
     }
 
     setRoad(coord) {
@@ -216,8 +224,8 @@ class Grid {
         if (start_coord !== undefined) {
             this.setAt(start_coord, ROAD_TILE);
         }
-        this.setAt(coord, START_TILE);
         this.setCost(coord, DEFAULT_COST);
+        this.setAt(coord, START_TILE);
     }
 
     setEnd(coord) {
@@ -226,8 +234,8 @@ class Grid {
         if (end_coord !== undefined) {
             this.setAt(end_coord, ROAD_TILE);
         }
-        this.setAt(coord, END_TILE);
         this.setCost(coord, DEFAULT_COST);
+        this.setAt(coord, END_TILE);
     }
 
     setVisited(coord) {
@@ -239,23 +247,17 @@ class Grid {
     }
 
     setCost(coord, cost) {
-        var square = document.getElementById(this.getSquareId(coord));
-        if (this.matrix[coord.getX()][coord.getY()].type != WALL_TILE && 
-            this.matrix[coord.getX()][coord.getY()].type != START_TILE && 
-            this.matrix[coord.getX()][coord.getY()].type != END_TILE) {
+        if (!([WALL_TILE, START_TILE, END_TILE]).includes(this.matrix[coord.getX()][coord.getY()].type)) {
 
             if (cost >= 0) {
                 this.matrix[coord.getX()][coord.getY()].cost = cost;
-                if(cost > 1) {
-                    square.innerHTML = cost;
-                }
-                else {
-                    square.innerHTML = "";
-                }
             }
             else {
-                square.innerHTML = "";
                 this.matrix[coord.getX()][coord.getY()].cost = DEFAULT_COST;
+            }
+            
+            if (this.show_cost) {
+                this.showCost();
             }
         }
     }
@@ -320,6 +322,18 @@ class Grid {
     /* Checks if the start and the end nodes are set */
     isValid() {
         return (this.getStart() !== undefined) && (this.getEnd() !== undefined);
+    }
+
+    /* Shows the weight of each node */
+    showCost() {
+        this.show_cost = true;
+        this.render();
+    }
+
+    /* Hides the weight of each node */
+    hideCost() {
+        this.show_cost = false;
+        this.render();
     }
 }
 

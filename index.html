@@ -20,7 +20,7 @@
                 <button class="button button-road" id="button_road" title="Eraser"></button>
                 <button class="button button-start" id="button_start" title="Start point"></button>
                 <button class="button button-end" id="button_end" title="End point"></button>
-                <div class="cost-container">
+                <div class="cost-container" id="cost_container">
                     <button class="button button-cost" id="button_cost" title="Cost"></button>
                     <input class="cost-input" id="cost_input" type="number" placeholder="Cost" min="1">
                 </div>
@@ -98,6 +98,25 @@
     document.getElementById("button_cost").addEventListener("click", function () {
         setCurrentMode(COST_TILE);
         document.getElementById("cost_input").style.display = "block";
+    });
+
+    document.getElementById("algorithm").addEventListener("change", function () {
+        switch (this.value) {
+            case "dijkstra":
+                grid.showCost();
+                document.getElementById("cost_container").classList.remove("hide");
+                break;
+                
+            case "bfs":
+                grid.hideCost();
+                document.getElementById("cost_container").classList.add("hide");
+                break;
+
+            case "dfs":
+                grid.hideCost();
+                document.getElementById("cost_container").classList.add("hide");
+                break;
+        }
     });
 
     document.getElementById("play_button").addEventListener("click", async function () {

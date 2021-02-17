@@ -137,9 +137,14 @@ body {
     display: inline-flex;
     align-items:center;
 }
+
 .cost-input {
     display: none;
     transition: 0.5s;
     width: 2vw;
     font-size: 0.9em;
+}
+
+.hide {
+    display: none !important;
 }
