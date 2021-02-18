@@ -51,7 +51,7 @@
             <div class="button-group">
                 <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1" title="Width">
                 <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1" title="Height">
-                <input type="range" min="1" max="200" value="50" id="speed_slider" title="Speed">
+                <input type="range" min="1" max="150" value="50" id="speed_slider" title="Speed">
             </div>
 
         </div>
@@ -182,7 +182,7 @@
         }
     });
 
-    document.getElementById("speed_slider").addEventListener("change", function () {
+    document.getElementById("speed_slider").addEventListener("input", function () {
         animation_speed(document.getElementById("speed_slider").value);
     });
 

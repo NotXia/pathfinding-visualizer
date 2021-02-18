@@ -39,15 +39,5 @@ async function dfs(grid, adjacent_nodes_function) {
 
     await explore(start_coord, []);
 
-
-    grid.setCurrentMode(PATH_TILE);
-    if (found) {
-        for (var i = 0; i < final_path.length; i++) {
-            let node = final_path[i];
-            if (node != start_coord) {
-                grid.draw(node);
-            }
-            await new Promise(r => setTimeout(r, ANIMATION_SPEED));
-        }
-    }
+    await draw_path(grid, final_path);
 }

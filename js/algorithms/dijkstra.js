@@ -50,15 +50,14 @@ async function dijkstra(grid, adjacent_nodes_function) {
         });
     }
 
-    grid.setCurrentMode(PATH_TILE);
-    var path = end_coord;
-    if (best_node_to[path.toString()] !== undefined) {
-        while (path.toString() != start_coord.toString()) {
-            path = best_node_to[path.toString()];
-            if (!path.equals(start_coord)) {
-                grid.draw(path);
-            }
-            await new Promise(r => setTimeout(r, ANIMATION_SPEED));
+    var final_path = [];
+    var node = end_coord;
+    if (best_node_to[node.toString()] !== undefined) {
+        while (!node.equals(start_coord)) {
+            node = best_node_to[node.toString()];
+            final_path.push(node);
         }
     }
+
+    await draw_path(grid, final_path.reverse());
 }
