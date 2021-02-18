@@ -1,13 +1,17 @@
 var script = document.createElement("script");
-script.src = "./js/algorithms/dijkstra.js";
-document.head.appendChild(script);
-
-var script = document.createElement("script");
 script.src = "./js/algorithms/bfs.js";
 document.head.appendChild(script);
 
 var script = document.createElement("script");
 script.src = "./js/algorithms/dfs.js";
+document.head.appendChild(script);
+
+var script = document.createElement("script");
+script.src = "./js/algorithms/dijkstra.js";
+document.head.appendChild(script);
+
+var script = document.createElement("script");
+script.src = "./js/algorithms/a_star.js";
 document.head.appendChild(script);
 
 var ANIMATION_SPEED = 50;

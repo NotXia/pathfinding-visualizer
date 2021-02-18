@@ -34,6 +34,7 @@
                         <div class="algorithm-select-container">
                             <select class="algorithm-select" id="algorithm">
                                 <option value="dijkstra">Dijkstra</option>
+                                <option value="a_star">A*</option>
                                 <option value="bfs">BFS</option>
                                 <option value="dfs">DFS</option>
                             </select>
@@ -120,15 +121,12 @@
     document.getElementById("algorithm").addEventListener("change", function () {
         switch (this.value) {
             case "dijkstra":
+            case "a_star":
                 grid.showCost();
                 document.getElementById("cost_container").classList.remove("hide");
                 break;
                 
             case "bfs":
-                grid.hideCost();
-                document.getElementById("cost_container").classList.add("hide");
-                break;
-
             case "dfs":
                 grid.hideCost();
                 document.getElementById("cost_container").classList.add("hide");
@@ -168,6 +166,15 @@
                     }
                     else {
                         await dfs_s(grid);
+                    }
+                    break;
+
+                case "a_star":
+                    if (diagonal_move) {
+                        await a_star_d(grid);
+                    }
+                    else {
+                        await a_star_s(grid);
                     }
                     break;
             }
