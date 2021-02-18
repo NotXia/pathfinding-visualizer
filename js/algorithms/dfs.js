@@ -9,6 +9,7 @@ async function dfs_s(grid) {
 async function dfs(grid, adjacent_nodes_function) {
     var start_coord = grid.getStart();
     var end_coord = grid.getEnd();
+    grid.setCurrentMode(VISITED_TILE);
     
     var visited = [];
     var final_path = [];
@@ -23,13 +24,13 @@ async function dfs(grid, adjacent_nodes_function) {
             return;
         }
         if (!node.equals(start_coord)) {
-            grid.draw(node, VISITED_TILE);
+            grid.draw(node);
             await new Promise(r => setTimeout(r, ANIMATION_SPEED));
         }
         path.push(node);
         
         let adjacent = adjacent_nodes_function(grid, node);
-        for(var i=0; i<adjacent.length && !found; i++) {
+        for (var i=0; i<adjacent.length && !found; i++) {
             if (visited[adjacent[i].toString()] === undefined && !found) {
                 await explore(adjacent[i], path.slice());
             }
@@ -38,12 +39,13 @@ async function dfs(grid, adjacent_nodes_function) {
 
     await explore(start_coord, []);
 
-    
+
+    grid.setCurrentMode(PATH_TILE);
     if (found) {
         for (var i = 0; i < final_path.length; i++) {
             let node = final_path[i];
             if (node != start_coord) {
-                grid.draw(node, PATH_TILE);
+                grid.draw(node);
             }
             await new Promise(r => setTimeout(r, ANIMATION_SPEED));
         }

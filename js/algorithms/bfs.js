@@ -9,6 +9,7 @@ async function bfs_s(grid) {
 async function bfs(grid, adjacent_nodes_function) {
     var start_coord = grid.getStart();
     var end_coord = grid.getEnd();
+    grid.setCurrentMode(VISITED_TILE);
 
     var to_visit = [];
     var visited = [];
@@ -24,7 +25,7 @@ async function bfs(grid, adjacent_nodes_function) {
             break;
         }
         if (!curr_coord[0].equals(start_coord)) {
-            grid.draw(curr_coord[0], VISITED_TILE);
+            grid.draw(curr_coord[0]);
             await new Promise(r => setTimeout(r, ANIMATION_SPEED));
         }
 
@@ -38,10 +39,11 @@ async function bfs(grid, adjacent_nodes_function) {
         });
     }
 
+    grid.setCurrentMode(PATH_TILE);
     for (var i = 0; i < final_path.length; i++) {
         let node = final_path[i];
         if (node != start_coord) {
-            grid.draw(node, PATH_TILE);
+            grid.draw(node);
         }
         await new Promise(r => setTimeout(r, ANIMATION_SPEED));
     }

@@ -50,7 +50,7 @@
             <div class="button-group">
                 <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1" title="Width">
                 <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1" title="Height">
-                <input type="range" min="0" max="1000" value="50" id="speed_slider" title="Speed">
+                <input type="range" min="1" max="200" value="50" id="speed_slider" title="Speed">
             </div>
 
         </div>
@@ -64,40 +64,57 @@
     var columns_input = document.getElementById("grid_columns");
     var rows_input = document.getElementById("grid_rows");
     var grid_container = document.getElementById("field");
+    var grid = new Grid("field", 15, 15, "cost_input");
 
     window.addEventListener("resize", function () {
-        scale_grids();
+        grid.scale();
     });
 
-    var grid = new Grid("field", 15, 15, "cost_input");
+    function show_costInput(flag) {
+        if (flag) {
+            document.getElementById("cost_input").style.display = "block";
+        }
+        else {
+            document.getElementById("cost_input").style.display = "none";
+        }
+    }
 
     columns_input.addEventListener("change", function () {
         grid.resize(parseInt(columns_input.value), parseInt(rows_input.value));
+        show_costInput(false);
+        grid.reset();
     });
 
     rows_input.addEventListener("change", function () {
         grid.resize(parseInt(columns_input.value), parseInt(rows_input.value));
+        show_costInput(false);
+        grid.reset();
     });
 
     document.getElementById("button_wall").addEventListener("click", function () {
-        setCurrentMode(WALL_TILE);
-        document.getElementById("cost_input").style.display = "none";
+        grid.setCurrentMode(WALL_TILE);
+        show_costInput(false);
+        grid.reset();
     });
     document.getElementById("button_road").addEventListener("click", function () {
-        setCurrentMode(ROAD_TILE);
-        document.getElementById("cost_input").style.display = "none";
+        grid.setCurrentMode(ROAD_TILE);
+        show_costInput(false);
+        grid.reset();
     });
     document.getElementById("button_start").addEventListener("click", function () {
-        setCurrentMode(START_TILE);
-        document.getElementById("cost_input").style.display = "none";
+        grid.setCurrentMode(START_TILE);
+        show_costInput(false);
+        grid.reset();
     });
     document.getElementById("button_end").addEventListener("click", function () {
-        setCurrentMode(END_TILE);
-        document.getElementById("cost_input").style.display = "none";
+        grid.setCurrentMode(END_TILE);
+        show_costInput(false);
+        grid.reset();
     });
     document.getElementById("button_cost").addEventListener("click", function () {
-        setCurrentMode(COST_TILE);
-        document.getElementById("cost_input").style.display = "block";
+        grid.setCurrentMode(COST_TILE);
+        show_costInput(true);
+        grid.reset();
     });
 
     document.getElementById("algorithm").addEventListener("change", function () {
@@ -120,7 +137,7 @@
     });
 
     document.getElementById("play_button").addEventListener("click", async function () {
-        if(grid.isValid()) {
+        if (grid.isValid()) {
             var algorithm = document.getElementById("algorithm").value;
             var diagonal_move = document.getElementById("diagonal_move").checked;
     
@@ -162,19 +179,24 @@
         animation_speed(document.getElementById("speed_slider").value);
     });
 
+    const to_lock = [
+        "play_button", "reset_button",
+        "grid_columns", "grid_rows",
+        "button_wall", "button_road", "button_start", "button_end", "cost_container",
+        "algorithm", "diagonal_move"
+    ];
+
     function lock() {
-        document.getElementById("play_button").classList.add("lock");
-        document.getElementById("reset_button").classList.add("lock");
-        document.getElementById("grid_columns").classList.add("lock");
-        document.getElementById("grid_rows").classList.add("lock");
+        to_lock.forEach(element => {
+            document.getElementById(element).classList.add("lock")
+        });
         grid.lock();
     }
 
     function unlock() {
-        document.getElementById("play_button").classList.remove("lock");
-        document.getElementById("reset_button").classList.remove("lock");
-        document.getElementById("grid_columns").classList.remove("lock");
-        document.getElementById("grid_rows").classList.remove("lock");
+        to_lock.forEach(element => {
+            document.getElementById(element).classList.remove("lock")
+        });
         grid.unlock();
     }
 </script>

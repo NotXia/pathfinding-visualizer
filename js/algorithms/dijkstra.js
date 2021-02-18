@@ -9,12 +9,13 @@ async function dijkstra_s(grid) {
 async function dijkstra(grid, adjacent_nodes_function) {
     var start_coord = grid.getStart();
     var end_coord = grid.getEnd();
+    grid.setCurrentMode(VISITED_TILE);
 
     var cost_to = {};
     var best_node_to = {};
     var to_visit = [];
 
-    for(let x=0; x<grid.getColumns(); x++) {
+    for (let x=0; x<grid.getColumns(); x++) {
         for (let y=0; y<grid.getRows(); y++) {
             best_node_to[new Coord(x, y).toString()] = undefined;
             cost_to[new Coord(x, y).toString()] = Infinity;
@@ -25,14 +26,14 @@ async function dijkstra(grid, adjacent_nodes_function) {
     best_node_to[start_coord.toString()] = start_coord;
     to_visit.push([start_coord, 0]);
 
-    while(to_visit.length > 0) {
+    while (to_visit.length > 0) {
         let curr_coord = to_visit.shift()[0];
 
         if (curr_coord.equals(end_coord)) {
             break;
         }
         if (!curr_coord.equals(start_coord) && !curr_coord.equals(end_coord)) {
-            grid.draw(curr_coord, VISITED_TILE);
+            grid.draw(curr_coord);
         }
         
         await new Promise(r => setTimeout(r, ANIMATION_SPEED));
@@ -45,17 +46,17 @@ async function dijkstra(grid, adjacent_nodes_function) {
                 to_visit.sort(function(a, b) {
                     return a[1] - b[1];
                 });
-                console.log(to_visit);
             }
         });
     }
 
+    grid.setCurrentMode(PATH_TILE);
     var path = end_coord;
     if (best_node_to[path.toString()] !== undefined) {
         while (path.toString() != start_coord.toString()) {
             path = best_node_to[path.toString()];
             if (!path.equals(start_coord)) {
-                grid.draw(path, PATH_TILE);
+                grid.draw(path);
             }
             await new Promise(r => setTimeout(r, ANIMATION_SPEED));
         }

@@ -43,8 +43,10 @@ class Grid {
         this.rows = rows;
         this.cost_input = cost_input_id
         this.show_cost = true;
+        this.drawing = false;
+        this.curr_mode = WALL_TILE;
 
-        // Generation of all the squares
+        // Initializes all the tiles
         this.matrix = [];
         for (let x = 0; x < columns; x++) {
             this.matrix[x] = [];
@@ -54,59 +56,8 @@ class Grid {
         }
 
         this.render();
-        all_grids.push(this);
     }
 
-    /* Sets all the listener for a tile */
-    add_square_listeners(square, coord) {
-        var grid_class = this;
-
-        square.addEventListener("mouseover", function () {
-            if (drawing) {
-                grid_class.draw(coord, curr_mode);
-            }
-        }, false);
-
-        square.addEventListener("mousedown", function (event) {
-            event.preventDefault();
-            startDrawing();
-            grid_class.draw(coord, curr_mode);
-        }, false);
-
-        square.addEventListener("mouseup", function () {
-            stopDrawing();
-        }, false);
-    }
-
-    /* Displays the grid */
-    render() {
-        // Generation the grid container
-        var grid = document.createElement("div");
-        grid.className = "grid-container";
-        grid.id = this.container_id + "grid-container";
-
-        for (let y = 0; y < this.rows; y++) {
-            for (let x = 0; x < this.columns; x++) {
-                var square = document.createElement("div");
-                square.className = "square tile" + this.matrix[x][y].type;
-                square.id = this.getSquareId(new Coord(x, y));
-                if (this.show_cost && !([WALL_TILE, START_TILE, END_TILE]).includes(this.matrix[x][y].type)) {
-                    square.innerHTML = this.matrix[x][y].cost;
-                }
-                else {
-                    square.innerHTML = "";
-                }
-
-                this.add_square_listeners(square, new Coord(x, y));
-
-                grid.appendChild(square);
-            }
-        }
-
-        document.getElementById(this.container_id).innerHTML = "";
-        document.getElementById(this.container_id).appendChild(grid);
-        this.scale();
-    }
 
     getColumns() {
         return this.columns;
@@ -120,8 +71,185 @@ class Grid {
         return this.matrix;
     }
 
-    draw(coord, mode) {
-        switch (mode) {
+    /* Gets the Coord object of the starting point */
+    getStart() {
+        for (let i = 0; i < this.columns; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                if (this.matrix[i][j].type == START_TILE) {
+                    return new Coord(i, j)
+                }
+            }
+        }
+        return undefined;
+    }
+
+    /* Gets the Coord object of the ending point */
+    getEnd() {
+        for (let i = 0; i < this.columns; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                if (this.matrix[i][j].type == END_TILE) {
+                    return new Coord(i, j)
+                }
+            }
+        }
+        return undefined;
+    }
+
+    /* Returns an identifier for the tile at the given coordinate */
+    getSquareId(coord) {
+        return this.container_id + "-" + coord.getX() + "-" + coord.getY();
+    }
+
+    getCostAt(coord) {
+        return this.matrix[coord.getX()][coord.getY()].cost;
+    }
+
+
+    /* Displays the grid */
+    render() {
+        // Generation the grid container
+        var grid = document.createElement("div");
+        grid.className = "grid-container";
+        grid.id = this.container_id + "grid-container";
+
+        // Generation of all the squares
+        for (let y = 0; y < this.rows; y++) {
+            for (let x = 0; x < this.columns; x++) {
+                var square = document.createElement("div");
+                square.className = "square tile" + this.matrix[x][y].type;
+                square.id = this.getSquareId(new Coord(x, y));
+
+                var grid_class = this;
+                let coord = new Coord(x, y)
+                square.addEventListener("mouseover", function () {
+                    if (grid_class.drawing) {
+                        grid_class.draw(coord);
+                    }
+                }, false);
+                square.addEventListener("mousedown", function (event) {
+                    event.preventDefault();
+                    grid_class.drawing = true;
+                    grid_class.draw(coord);
+                }, false);
+                square.addEventListener("mouseup", function () {
+                    grid_class.drawing = false;
+                }, false);
+
+                grid.appendChild(square);
+            }
+        }
+
+        document.getElementById(this.container_id).innerHTML = "";
+        document.getElementById(this.container_id).appendChild(grid);
+        this.scale();
+
+        /* Showing cost for each tile (if needed) */
+        for (let y = 0; y < this.rows; y++) {
+            for (let x = 0; x < this.columns; x++) {
+                this.showCostAt(new Coord(x, y));
+            }
+        }
+    }
+
+    /* Scales the grid */
+    scale() {
+        var container = document.getElementById(this.container_id);
+        var grid = document.getElementById(this.container_id + "grid-container");
+
+        var square_size = Math.min(container.clientWidth / this.columns, container.clientHeight / this.rows);
+        grid.style.width = (square_size * this.columns) + "px";
+        grid.style.height = (square_size * this.rows) + "px";
+
+        grid.style.gridTemplateColumns = (square_size + "px ").repeat(this.columns);
+        grid.style.gridTemplateRows = (square_size + "px ").repeat(this.rows);
+    }
+
+    /* Resizes the grid and renders it */
+    resize(new_columns, new_rows) {
+        if (new_columns > this.columns) {
+            for (let i = 0; i < (new_columns - this.columns); i++) {
+                var new_row = [];
+                for (let j = 0; j < new_rows; j++) {
+                    new_row.push({ type: ROAD_TILE, cost: 1 });
+                }
+                this.matrix.push(new_row);
+            }
+        }
+        else if (new_columns < this.columns) {
+            for (let i = 0; i < (this.columns - new_columns); i++) {
+                this.matrix.pop();
+            }
+        }
+        this.columns = new_columns;
+
+        if (new_rows > this.rows) {
+            for (let i = 0; i < this.columns; i++) {
+                for (let j = 0; j < (new_rows - this.rows); j++) {
+                    this.matrix[i][this.rows + j] = { type: ROAD_TILE, cost: 1 };
+                }
+            }
+        }
+        else if (new_rows < this.rows) {
+            for (let i = 0; i < this.columns; i++) {
+                for (let j = 0; j < (this.rows - new_rows); j++) {
+                    this.matrix[i].pop();
+                }
+            }
+        }
+        this.rows = new_rows;
+
+        this.render();
+    }
+
+    /* Removes from the matrix all the visited node and the final path of the previous search */
+    reset() {
+        for (let i = 0; i < this.columns; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                if (this.matrix[i][j].type == VISITED_TILE || this.matrix[i][j].type == PATH_TILE) {
+                    this.matrix[i][j].type = ROAD_TILE;
+                }
+            }
+        }
+        this.render();
+    }
+
+    /* Shows the weight of each node */
+    showCost() {
+        this.show_cost = true;
+        this.render();
+    }
+
+    /* Hides the weight of each node */
+    hideCost() {
+        this.show_cost = false;
+        this.render();
+    }
+
+    /* Displays the weight of the square at the given coordinate */
+    showCostAt(coord) {
+        var square = document.getElementById(this.getSquareId(coord));
+
+        if (this.show_cost) {
+            if (([WALL_TILE, START_TILE, END_TILE]).includes(this.matrix[coord.getX()][coord.getY()].type)) {
+                square.innerHTML = "";
+            }
+            else {
+                square.innerHTML = this.getCostAt(coord);
+            }
+        }
+        else {
+            square.innerHTML = "";
+        }
+    }
+    
+
+    setCurrentMode(mode) {
+        this.curr_mode = mode;
+    }
+
+    /* Handles the type change of the given coordinate */
+    draw(coord) {
+        switch (this.curr_mode) {
             case WALL_TILE:
                 this.setWall(coord);
                 break;
@@ -152,47 +280,7 @@ class Grid {
         }
     }
 
-    /* Gets the Coord object of the starting point */
-    getStart() {
-        for (let i = 0; i < this.columns; i++) {
-            for (let j = 0; j < this.rows; j++) {
-                if (this.matrix[i][j].type == START_TILE) {
-                    return new Coord(i, j)
-                }
-            }
-        }
-        return undefined;
-    }
-
-    /* Gets the Coord object of the ending point */
-    getEnd() {
-        for (let i = 0; i < this.columns; i++) {
-            for (let j = 0; j < this.rows; j++) {
-                if (this.matrix[i][j].type == END_TILE) {
-                    return new Coord(i, j)
-                }
-            }
-        }
-        return undefined;
-    }
-
-    getCostAt(coord) {
-        return this.matrix[coord.getX()][coord.getY()].cost;
-    }
-
-    /* Scales the grid */
-    scale() {
-        var container = document.getElementById(this.container_id);
-        var grid = document.getElementById(this.container_id + "grid-container");
-
-        var square_size = Math.min(container.clientWidth / this.columns, container.clientHeight / this.rows);
-        grid.style.width = (square_size * this.columns) + "px";
-        grid.style.height = (square_size * this.rows) + "px";
-
-        grid.style.gridTemplateColumns = (square_size + "px ").repeat(this.columns);
-        grid.style.gridTemplateRows = (square_size + "px ").repeat(this.rows);
-    }
-
+    /* Changes the type of the tile at the given coordinate */
     setAt(coord, type) {
         var square = document.getElementById(this.getSquareId(coord));
         square.classList.remove("tile0", "tile1", "tile2", "tile3", "tile4", "tile5");
@@ -200,13 +288,7 @@ class Grid {
         
         this.matrix[coord.getX()][coord.getY()].type = type;
 
-        if (([WALL_TILE, START_TILE, END_TILE]).includes(type)) {
-            square.innerHTML = "";
-        }
-    }
-
-    getSquareId(coord) {
-        return this.container_id + "-" + coord.getX() + "-" + coord.getY();
+        this.showCostAt(coord);
     }
 
     setWall(coord) {
@@ -248,7 +330,6 @@ class Grid {
 
     setCost(coord, cost) {
         if (!([WALL_TILE, START_TILE, END_TILE]).includes(this.matrix[coord.getX()][coord.getY()].type)) {
-
             if (cost >= 0) {
                 this.matrix[coord.getX()][coord.getY()].cost = cost;
             }
@@ -256,65 +337,17 @@ class Grid {
                 this.matrix[coord.getX()][coord.getY()].cost = DEFAULT_COST;
             }
             
-            if (this.show_cost) {
-                this.showCost();
-            }
+            this.showCostAt(coord);
         }
     }
 
-    /* Resizes the grid and renders it */
-    resize(new_columns, new_rows) {
-        if (new_columns > this.columns) {
-            for (let i=0; i<(new_columns-this.columns); i++) {
-                var new_row = [];
-                for(let j=0; j<new_rows; j++) {
-                    new_row.push({ type: ROAD_TILE, cost: 1 });
-                }
-                this.matrix.push(new_row);
-            }
-        }
-        else if (new_columns < this.columns) {
-            for (let i=0; i<(this.columns-new_columns); i++) {
-                this.matrix.pop();
-            }
-        }
-        this.columns = new_columns;
 
-        if (new_rows > this.rows) {
-            for (let i=0; i<this.columns; i++) {
-                for (let j=0; j<(new_rows-this.rows); j++) {
-                    this.matrix[i][this.rows+j] = { type: ROAD_TILE, cost: 1 };
-                }
-            }
-        }
-        else if (new_rows < this.rows) {
-            for (let i=0; i<this.columns; i++) {
-                for (let j=0; j<(this.rows-new_rows); j++) {
-                    this.matrix[i].pop();
-                }
-            }
-        }
-        this.rows = new_rows;
-
-        this.render();
-    }
-
-    /* Removes from the matrix all the visited node and the final path of the previous search */
-    reset() {
-        for (let i = 0; i < this.columns; i++) {
-            for (let j = 0; j < this.rows; j++) {
-                if (this.matrix[i][j].type == VISITED_TILE || this.matrix[i][j].type == PATH_TILE) {
-                    this.matrix[i][j].type = ROAD_TILE;
-                }
-            }
-        }
-        this.render();
-    }
-
+    /* Locks the grid, preventing any action */
     lock() {
         document.getElementById(this.container_id).classList.add("lock");
     }
 
+    /* Unloocks the grid */
     unlock() {
         document.getElementById(this.container_id).classList.remove("lock");
     }
@@ -323,41 +356,5 @@ class Grid {
     isValid() {
         return (this.getStart() !== undefined) && (this.getEnd() !== undefined);
     }
-
-    /* Shows the weight of each node */
-    showCost() {
-        this.show_cost = true;
-        this.render();
-    }
-
-    /* Hides the weight of each node */
-    hideCost() {
-        this.show_cost = false;
-        this.render();
-    }
 }
 
-
-var all_grids = []
-/* Scales all the created grids */
-function scale_grids() {
-    all_grids.forEach(grid => {
-        grid.scale();
-    });
-}
-
-
-var drawing = false;
-var curr_mode = 0;
-
-function setCurrentMode(mode) {
-    curr_mode = mode;
-}
-
-function startDrawing() {
-    drawing = true;
-}
-
-function stopDrawing() {
-    drawing = false;
-}
