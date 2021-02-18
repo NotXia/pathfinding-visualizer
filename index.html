@@ -51,7 +51,7 @@
             <div class="button-group">
                 <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1" title="Width">
                 <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1" title="Height">
-                <input type="range" min="1" max="150" value="50" id="speed_slider" title="Speed">
+                <input type="range" min="1" max="30" value="15" id="speed_slider" title="Speed">
             </div>
 
         </div>
@@ -62,15 +62,13 @@
 </body>
 
 <script>
-    var columns_input = document.getElementById("grid_columns");
-    var rows_input = document.getElementById("grid_rows");
     var grid_container = document.getElementById("field");
     var grid = new Grid("field", 15, 15, "cost_input");
-
+    
     window.addEventListener("resize", function () {
         grid.scale();
     });
-
+    
     function show_costInput(flag) {
         if (flag) {
             document.getElementById("cost_input").style.display = "block";
@@ -79,13 +77,15 @@
             document.getElementById("cost_input").style.display = "none";
         }
     }
-
+    
+    var columns_input = document.getElementById("grid_columns");
     columns_input.addEventListener("change", function () {
         grid.resize(parseInt(columns_input.value), parseInt(rows_input.value));
         show_costInput(false);
         grid.reset();
     });
-
+    
+    var rows_input = document.getElementById("grid_rows");
     rows_input.addEventListener("change", function () {
         grid.resize(parseInt(columns_input.value), parseInt(rows_input.value));
         show_costInput(false);
@@ -119,6 +119,8 @@
     });
 
     document.getElementById("algorithm").addEventListener("change", function () {
+        show_costInput(false);
+
         switch (this.value) {
             case "dijkstra":
             case "a_star":
@@ -135,6 +137,8 @@
     });
 
     document.getElementById("play_button").addEventListener("click", async function () {
+        show_costInput(false);
+
         if (grid.isValid()) {
             var algorithm = document.getElementById("algorithm").value;
             var diagonal_move = document.getElementById("diagonal_move").checked;
@@ -183,6 +187,7 @@
     });
 
     document.getElementById("speed_slider").addEventListener("input", function () {
+        show_costInput(false);
         animation_speed(document.getElementById("speed_slider").value);
     });
 

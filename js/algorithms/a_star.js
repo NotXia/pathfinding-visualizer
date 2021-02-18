@@ -66,6 +66,7 @@ async function a_star(grid, adjacent_nodes_function, heuristic) {
     var final_path = [];
     var node = end_coord;
     if (best_node_to[node.toString()] !== undefined) {
+        final_path.push(end_coord);
         while (!node.equals(start_coord)) {
             node = best_node_to[node.toString()];
             final_path.push(node);

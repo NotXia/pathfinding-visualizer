@@ -17,7 +17,7 @@ document.head.appendChild(script);
 var ANIMATION_SPEED = 50;
 
 function animation_speed(speed) {
-    ANIMATION_SPEED = speed;
+    ANIMATION_SPEED = 200/speed;
 }
 
 
@@ -26,11 +26,40 @@ async function draw_path(grid, path) {
     var end_coord = grid.getEnd();
     grid.setCurrentMode(PATH_TILE);
 
-    for (var i=0; i<path.length; i++) {
-        let node = path[i];
-        if (!node.equals(start_coord) && !node.equals(end_coord)) {
-            grid.draw(node);
+    function direction(node, next) {
+        if (node.getX() == next.getX() && node.getY() > next.getY()) {
+            return NORTH;
         }
+        else if (node.getX() < next.getX() && node.getY() > next.getY()) {
+            return NORTH_EAST;
+        }
+        else if (node.getX() > next.getX() && node.getY() > next.getY()) {
+            return NORTH_WEST;
+        }
+        else if (node.getX() == next.getX() && node.getY() < next.getY()) {
+            return SOUTH;
+        }
+        else if (node.getX() < next.getX() && node.getY() < next.getY()) {
+            return SOUTH_EAST;
+        }
+        else if (node.getX() > next.getX() && node.getY() < next.getY()) {
+            return SOUTH_WEST;
+        }
+        else if (node.getX() < next.getX() && node.getY() == next.getY()) {
+            return EAST;
+        }
+        else if (node.getX() > next.getX() && node.getY() == next.getY()) {
+            return WEST;
+        }
+    }
+
+    // path[0] contains the start_coord
+    // path[len-1] contains the end_coord
+    for (var i=0; i<path.length-1; i++) {
+        if (!path[i].equals(start_coord) && !path[i].equals(end_coord)) {
+            grid.draw(path[i]);
+        }
+        grid.setDirection(path[i], direction(path[i], path[i+1]))
         await new Promise(r => setTimeout(r, ANIMATION_SPEED));
     }
 

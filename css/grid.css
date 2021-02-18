@@ -36,3 +36,59 @@
 .lock {
     pointer-events: none;
 }
+
+.direction0 { /* North */
+    background-image: url('../img/direction/north.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.direction1 { /* South */
+    background-image: url('../img/direction/south.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.direction2 { /* East */
+    background-image: url('../img/direction/east.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.direction3 { /* West */
+    background-image: url('../img/direction/west.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.direction4 { /* North-east */
+    background-image: url('../img/direction/north_east.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.direction5 { /* North-west */
+    background-image: url('../img/direction/north_west.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.direction6 { /* South-east */
+    background-image: url('../img/direction/south_east.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.direction7 { /* South-west */
+    background-image: url('../img/direction/south_west.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}

@@ -22,6 +22,7 @@ async function bfs(grid, adjacent_nodes_function) {
 
         if (curr_coord[0].equals(end_coord)) {
             final_path = curr_coord[1];
+            final_path.push(end_coord);
             break;
         }
         if (!curr_coord[0].equals(start_coord)) {

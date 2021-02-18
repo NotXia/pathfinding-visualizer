@@ -6,6 +6,16 @@ const VISITED_TILE = 4;
 const PATH_TILE = 5;
 const COST_TILE = 6;
 
+const NORTH = 0;
+const SOUTH = 1;
+const EAST = 2;
+const WEST = 3;
+const NORTH_EAST = 4;
+const NORTH_WEST = 5;
+const SOUTH_EAST = 6;
+const SOUTH_WEST = 7;
+
+
 const DEFAULT_COST = 1;
 
 class Coord {
@@ -216,13 +226,22 @@ class Grid {
     /* Shows the weight of each node */
     showCost() {
         this.show_cost = true;
-        this.render();
+        for (let y = 0; y < this.rows; y++) {
+            for (let x = 0; x < this.columns; x++) {
+                this.showCostAt(new Coord(x, y));
+            }
+        }
     }
 
     /* Hides the weight of each node */
     hideCost() {
         this.show_cost = false;
-        this.render();
+        for (let y = 0; y < this.rows; y++) {
+            for (let x = 0; x < this.columns; x++) {
+                var square = document.getElementById(this.getSquareId(new Coord(x, y)));
+                square.innerHTML = "";
+            }
+        }
     }
 
     /* Displays the weight of the square at the given coordinate */
@@ -283,7 +302,10 @@ class Grid {
     /* Changes the type of the tile at the given coordinate */
     setAt(coord, type) {
         var square = document.getElementById(this.getSquareId(coord));
-        square.classList.remove("tile0", "tile1", "tile2", "tile3", "tile4", "tile5");
+        square.classList.remove(
+            "tile0", "tile1", "tile2", "tile3", "tile4", "tile5", 
+            "direction0", "direction1", "direction2", "direction3", "direction4", "direction5", "direction6", "direction7"
+        );
         square.classList.add("tile" + type);
         
         this.matrix[coord.getX()][coord.getY()].type = type;
@@ -339,6 +361,11 @@ class Grid {
             
             this.showCostAt(coord);
         }
+    }
+
+    setDirection(coord, direction) {
+        var square = document.getElementById(this.getSquareId(coord));
+        square.classList.add("direction" + direction);
     }
 
 

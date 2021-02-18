@@ -21,6 +21,7 @@ async function dfs(grid, adjacent_nodes_function) {
         if (node.equals(end_coord)) {
             found = true;
             final_path = path;
+            final_path.push(end_coord);
             return;
         }
         if (!node.equals(start_coord)) {
