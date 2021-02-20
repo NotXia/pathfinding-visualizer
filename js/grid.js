@@ -129,7 +129,7 @@ class Grid {
                 square.className = "square tile" + this.matrix[x][y].type;
                 square.id = this.getSquareId(new Coord(x, y));
 
-                var grid_class = this;
+                let grid_class = this;
                 let coord = new Coord(x, y)
                 square.addEventListener("mouseover", function () {
                     if (grid_class.drawing) {
@@ -145,9 +145,29 @@ class Grid {
                     grid_class.drawing = false;
                 }, false);
 
+                /* For mobile */
+                square.addEventListener("touchstart", function () {
+                    grid_class.drawing = true;
+                    grid_class.draw(coord);
+                }, false);
+                square.addEventListener("touchend", function () {
+                    grid_class.drawing = false;
+                }, false);
+
                 grid.appendChild(square);
             }
         }
+
+        /* For mobile */
+        let grid_class = this;
+        grid.addEventListener("touchmove", function (event) {
+            event.preventDefault();
+
+            if (grid_class.drawing) {
+                let coord_parts = document.elementFromPoint(event.touches[0].pageX, event.touches[0].pageY).id.split("-");
+                grid_class.draw(new Coord(coord_parts[1], coord_parts[2]));
+            }
+        }, false);
 
         document.getElementById(this.container_id).innerHTML = "";
         document.getElementById(this.container_id).appendChild(grid);
