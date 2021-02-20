@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="./js/grid.js"></script>
     <script src="./js/finder.js"></script>
     <link rel="stylesheet" href="css/grid.css">
@@ -13,47 +15,53 @@
 
 <body>
 
-    <div class="topbar">
-        <div class="button-box">
-            <div class="button-group">
-                <button class="button button-wall" id="button_wall" title="Wall"></button>
-                <button class="button button-road" id="button_road" title="Eraser"></button>
-                <button class="button button-start" id="button_start" title="Start point"></button>
-                <button class="button button-end" id="button_end" title="End point"></button>
-                <div class="cost-container" id="cost_container">
-                    <button class="button button-cost" id="button_cost" title="Cost"></button>
-                    <input class="cost-input" id="cost_input" type="number" placeholder="Cost" min="1">
+    <div class="container topbar">
+        <!-- <div class="row button-box"> -->
+        <div class="row">
+            <div class="col-sm-12 col-lg-4 d-flex justify-content-center align-items-center button-box">
+                <div class="button-group">
+                    <button class="button button-wall" id="button_wall" title="Wall"></button>
+                    <button class="button button-road" id="button_road" title="Eraser"></button>
+                    <button class="button button-start" id="button_start" title="Start point"></button>
+                    <button class="button button-end" id="button_end" title="End point"></button>
+                    <div class="cost-container" id="cost_container">
+                        <button class="button button-cost" id="button_cost" title="Cost"></button>
+                        <input class="cost-input" id="cost_input" type="number" placeholder="Cost" min="1">
+                    </div>
                 </div>
             </div>
 
-            <div class="button-group">
-                <button class="button button-play" id="play_button" title="Play"></button>
-                <button class="button button-reset" id="reset_button" onclick="grid.reset()" title="Reset"></button>
-                <div class="algorithm-box">
-                    <div>
-                        <div class="algorithm-select-container">
-                            <select class="algorithm-select" id="algorithm">
-                                <option value="dijkstra">Dijkstra</option>
-                                <option value="a_star">A*</option>
-                                <option value="bfs">BFS</option>
-                                <option value="dfs">DFS</option>
-                            </select>
-                        </div>
-                        <br>
-                        <div class="diagonal-checkbox-container">
-                            <input id="diagonal_move" type="checkbox">
-                            <label for="diagonal_move">Diagonal moves</label>
+            <div class="col-sm-12 col-lg-4 d-flex justify-content-center align-items-center button-box">
+                <div class="button-group">
+                    <button class="button button-play" id="play_button" title="Play"></button>
+                    <button class="button button-reset" id="reset_button" onclick="grid.reset()" title="Reset"></button>
+                    <div class="algorithm-box">
+                        <div>
+                            <div class="algorithm-select-container">
+                                <select class="algorithm-select" id="algorithm">
+                                    <option value="dijkstra">Dijkstra</option>
+                                    <option value="a_star">A*</option>
+                                    <option value="bfs">BFS</option>
+                                    <option value="dfs">DFS</option>
+                                </select>
+                            </div>
+                            <br>
+                            <div class="diagonal-checkbox-container">
+                                <input id="diagonal_move" type="checkbox">
+                                <label for="diagonal_move">Diagonal moves</label>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="button-group">
-                <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1" title="Width">
-                <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1" title="Height">
-                <input type="range" min="1" max="30" value="15" id="speed_slider" title="Speed">
+            <div class="col-sm-12 col-lg-4 d-flex justify-content-center align-items-center button-box">
+                <div class="button-group">
+                    <input class="size-input" id="grid_columns" type="number" placeholder="Columns" value="15" min="1" title="Width">
+                    <input class="size-input" id="grid_rows" type="number" placeholder="Rows" value="15" min="1" title="Height">
+                    <input type="range" min="1" max="30" value="15" id="speed_slider" title="Speed">
+                </div>
             </div>
-
         </div>
     </div>
 

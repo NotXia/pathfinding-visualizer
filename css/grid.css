@@ -6,7 +6,7 @@
 .square {
     border: 1px #494949 solid;
     color: #b6b6b6;
-    font-size: 0.8em;
+    font-size: 1.3vh;
 }
 
 .tile0 { /* Wall */

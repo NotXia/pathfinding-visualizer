@@ -5,31 +5,32 @@
 body {
     margin: 0;
     background-color: #28292b;
+    color: #b8b8b8;
 }
 
 .topbar {
-    width: 80vw;
-    height: 10vh;
-    margin: auto;
-    margin-bottom: 2vh;
-    margin-top: 2vh;
-    border-radius: 5vh;
-    background-color: #363638;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+    /* padding: 0.5em;
+    border-radius: 5vh; */
+    /* background-color: #3b3b3b; */
     transition: 0.5s;
 }
 
 .button-box {
-    width: fit-content;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    margin: auto;
+    margin-top: 1vh;
 }
 
 .button-group {
     display: flex;
-    padding-right: 1.5vw;
-    padding-left: 1.5vw;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10em;
+    background-color: #3b3b3b;
+    height: 100%;
+    padding: 0.2em;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .button {
@@ -39,12 +40,12 @@ body {
     outline: none;
     text-align: center;
     text-decoration: none;
-    width: 5vh;
-    height: 5vh;
+    width: 2.2em;
+    height: 2.2em;
     display: inline-block;
     opacity: 0.7;
     transition: 0.5s;
-    margin: 10px;
+    margin: 0.5em;
 }
 
 .button-wall {
@@ -101,14 +102,13 @@ body {
 }
 
 .size-input {
-    width: 4vw;
-    height: 3.5vh;
+    width: 3.5em;
     text-align: center;
     transition: 0.5s;
-    font-size: medium;
-    margin-left: 1vw;
+    font-size: 1em;
+    margin: 0.4em;
     border: none;
-    border-radius: 4px;
+    border-radius: 1em;
 }
 
 .algorithm-box {
@@ -124,7 +124,7 @@ body {
 .algorithm-select {
     border: none;
     border-radius: 5em;
-    padding: 0.5vh;
+    padding: 0.3em;
     font-size: 0.9em;
 }
 
