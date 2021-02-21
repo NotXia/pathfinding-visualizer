@@ -1,3 +1,5 @@
+import { adjacent_nodes_s, adjacent_nodes_d, draw_path } from '../finder.js'
+
 async function a_star_d(grid) {
     await a_star(grid, adjacent_nodes_d, chebyshev_distance);
 }
@@ -7,14 +9,14 @@ async function a_star_s(grid) {
 }
 
 function manhattan_distance(node_coord, end_coord) {
-    dist_x = Math.abs(node_coord.getX() - end_coord.getX());
-    dist_y = Math.abs(node_coord.getY() - end_coord.getY());
+    let dist_x = Math.abs(node_coord.getX() - end_coord.getX());
+    let dist_y = Math.abs(node_coord.getY() - end_coord.getY());
     return (dist_x + dist_y);
 }
 
 function chebyshev_distance(node_coord, end_coord) {
-    dist_x = Math.abs(node_coord.getX() - end_coord.getX());
-    dist_y = Math.abs(node_coord.getY() - end_coord.getY());
+    let dist_x = Math.abs(node_coord.getX() - end_coord.getX());
+    let dist_y = Math.abs(node_coord.getY() - end_coord.getY());
     return Math.max(dist_x, dist_y);
 }
 
@@ -75,3 +77,5 @@ async function a_star(grid, adjacent_nodes_function, heuristic) {
 
     await draw_path(grid, final_path.reverse());
 }
+
+export { a_star_d, a_star_s };

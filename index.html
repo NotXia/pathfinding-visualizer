@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="./js/grid.js"></script>
-    <script src="./js/finder.js"></script>
+    <script type="module" src="./js/finder.js"></script>
     <link rel="stylesheet" href="css/grid.css">
     <link rel="stylesheet" href="css/ui.css">
     <title>Pathfinding</title>
@@ -16,7 +16,6 @@
 <body>
 
     <div class="container topbar">
-        <!-- <div class="row button-box"> -->
         <div class="row">
             <div class="col-sm-12 col-lg-4 d-flex justify-content-center align-items-center button-box">
                 <div class="button-group">
@@ -153,43 +152,7 @@
     
             grid.reset();
             lock();
-            switch (algorithm) {
-                case "dijkstra":
-                    if(diagonal_move) {
-                        await dijkstra_d(grid);
-                    }
-                    else {
-                        await dijkstra_s(grid);
-                    }
-                    break;
-    
-                case "bfs":
-                    if (diagonal_move) {
-                        await bfs_d(grid);
-                    }
-                    else {
-                        await bfs_s(grid);
-                    }
-                    break;
-
-                case "dfs":
-                    if (diagonal_move) {
-                        await dfs_d(grid);
-                    }
-                    else {
-                        await dfs_s(grid);
-                    }
-                    break;
-
-                case "a_star":
-                    if (diagonal_move) {
-                        await a_star_d(grid);
-                    }
-                    else {
-                        await a_star_s(grid);
-                    }
-                    break;
-            }
+            await search(grid, algorithm, diagonal_move);
             unlock();
         }
     });

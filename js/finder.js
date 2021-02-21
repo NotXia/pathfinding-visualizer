@@ -1,23 +1,54 @@
-var script = document.createElement("script");
-script.src = "./js/algorithms/bfs.js";
-document.head.appendChild(script);
+import { dfs_d, dfs_s } from './algorithms/dfs.js';
+import { bfs_d, bfs_s } from './algorithms/bfs.js';
+import { dijkstra_d, dijkstra_s } from './algorithms/dijkstra.js';
+import { a_star_d, a_star_s } from './algorithms/a_star.js';
 
-var script = document.createElement("script");
-script.src = "./js/algorithms/dfs.js";
-document.head.appendChild(script);
 
-var script = document.createElement("script");
-script.src = "./js/algorithms/dijkstra.js";
-document.head.appendChild(script);
+window.ANIMATION_SPEED = 50;
 
-var script = document.createElement("script");
-script.src = "./js/algorithms/a_star.js";
-document.head.appendChild(script);
-
-var ANIMATION_SPEED = 50;
-
-function animation_speed(speed) {
+window.animation_speed = function animation_speed(speed) {
     ANIMATION_SPEED = 200/speed;
+}
+
+
+window.search = async function search(grid, algorithm, diagonal) {
+    switch (algorithm) {
+        case "dijkstra":
+            if (diagonal) {
+                await dijkstra_d(grid);
+            }
+            else {
+                await dijkstra_s(grid);
+            }
+            break;
+
+        case "bfs":
+            if (diagonal) {
+                await bfs_d(grid);
+            }
+            else {
+                await bfs_s(grid);
+            }
+            break;
+
+        case "dfs":
+            if (diagonal) {
+                await dfs_d(grid);
+            }
+            else {
+                await dfs_s(grid);
+            }
+            break;
+
+        case "a_star":
+            if (diagonal) {
+                await a_star_d(grid);
+            }
+            else {
+                await a_star_s(grid);
+            }
+            break;
+    }
 }
 
 
@@ -116,3 +147,5 @@ function adjacent_nodes_d(grid, coord) {
     }
     return near;
 }
+
+export { draw_path, adjacent_nodes_s, adjacent_nodes_d };

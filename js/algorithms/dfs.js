@@ -1,3 +1,5 @@
+import { adjacent_nodes_s, adjacent_nodes_d, draw_path } from '../finder.js'
+
 async function dfs_d(grid) {
     await dfs(grid, adjacent_nodes_d);
 }
@@ -42,3 +44,5 @@ async function dfs(grid, adjacent_nodes_function) {
 
     await draw_path(grid, final_path);
 }
+
+export { dfs_d, dfs_s };

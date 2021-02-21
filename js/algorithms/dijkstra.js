@@ -1,3 +1,5 @@
+import { adjacent_nodes_s, adjacent_nodes_d, draw_path } from '../finder.js'
+
 async function dijkstra_d(grid) {
     await dijkstra(grid, adjacent_nodes_d);
 }
@@ -62,3 +64,5 @@ async function dijkstra(grid, adjacent_nodes_function) {
 
     await draw_path(grid, final_path.reverse());
 }
+
+export { dijkstra_d, dijkstra_s };
