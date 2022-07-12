@@ -8,4 +8,4 @@ A simple pathfinding visualizer with the following algorithms:
 - A*
 
 ## Demo
-https://notxia.github.io/pathfinding
+https://notxia.github.io/pathfinding-visualizer/
